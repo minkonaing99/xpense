@@ -1,0 +1,116 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Expense Analytics - Xpenses</title>
+    <link rel="stylesheet" href="css/style.css">
+    <link rel="stylesheet" href="css/chart.css">
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+</head>
+
+<body>
+    <!-- Header -->
+    <header class="header">
+        <div class="container">
+            <nav class="navbar">
+                <a href="index.html" class="logo">Xpenses</a>
+                <div class="nav-actions">
+                    <a href="index.html" class="nav-btn">
+                        <img src="icons/back.svg" alt="Back">
+                        <span>Back to Dashboard</span>
+                    </a>
+                </div>
+            </nav>
+        </div>
+    </header>
+
+    <!-- Key Check Modal -->
+    <div id="keyModal" class="modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h2>Access Required</h2>
+            </div>
+            <div class="modal-body">
+                <p>Please enter your access key to view the analytics:</p>
+                <input type="password" class="form-input" id="keyInput" placeholder="Enter your access key"
+                    autocomplete="off">
+                <div id="keyError" class="error-message" style="display: none;"></div>
+            </div>
+            <div class="modal-footer">
+                <button id="submitKey" class="btn btn-primary">Access Analytics</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Main Content -->
+    <main class="main-content" id="mainContent" style="display: none;">
+        <div class="container">
+            <h1 class="page-title">Expense Analytics</h1>
+
+            <!-- Chart Controls -->
+            <div class="chart-controls">
+                <div class="control-group">
+                    <label for="dateRange" class="form-label">Date Range</label>
+                    <select id="dateRange" class="form-select">
+                        <option value="7" selected>Last 7 days</option>
+                        <option value="30">Last 30 days</option>
+                        <option value="90">Last 90 days</option>
+                        <option value="all">All time</option>
+                    </select>
+                </div>
+                <button id="refreshCharts" class="btn">Refresh Charts</button>
+            </div>
+
+            <!-- Charts Grid -->
+            <div class="charts-grid">
+                <!-- Pie Chart Section -->
+                <div class="chart-section">
+                    <div class="chart-card">
+                        <div class="chart-header">
+                            <h2 class="chart-title">Category Split</h2>
+                            <p class="chart-subtitle">Quick overview of spending by category</p>
+                        </div>
+                        <div class="chart-container">
+                            <canvas id="pieChart"></canvas>
+                        </div>
+                        <div class="chart-legend" id="pieLegend"></div>
+                    </div>
+                </div>
+
+                <!-- Line Chart Section -->
+                <div class="chart-section">
+                    <div class="chart-card">
+                        <div class="chart-header">
+                            <h2 class="chart-title">Daily Spending Trends</h2>
+                            <p class="chart-subtitle">Track your daily expense patterns</p>
+                        </div>
+                        <div class="chart-container">
+                            <canvas id="lineChart"></canvas>
+                        </div>
+                        <div class="chart-stats" id="lineStats"></div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Summary Stats -->
+            <div class="summary-stats" id="summaryStats">
+                <!-- Dynamic content will be inserted here -->
+            </div>
+        </div>
+    </main>
+
+    <!-- Loading Overlay -->
+    <div id="loadingOverlay" class="loading-overlay">
+        <div class="loading-spinner"></div>
+        <p>Loading chart data...</p>
+    </div>
+
+    <script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
+    <script src="js/modal-toast.js"></script>
+    <script src="js/key_check.js"></script>
+    <script src="js/chart.js"></script>
+</body>
+
+</html>

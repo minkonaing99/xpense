@@ -1,0 +1,170 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Xpenses - Smart Expense Tracker</title>
+
+    <!-- PWA Meta Tags -->
+    <meta name="theme-color" content="#667eea">
+    <meta name="mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+    <meta name="apple-mobile-web-app-title" content="Xpenses">
+    <meta name="description" content="Track your expenses and allowance with ease">
+
+    <!-- PWA Icons -->
+    <link rel="icon" type="image/x-icon" href="favicon.ico">
+    <link rel="apple-touch-icon" href="image/icon-192.png">
+    <link rel="manifest" href="manifest.json">
+
+    <link rel="stylesheet" href="css/style.css">
+    <link rel="prefetch" href="api/key.php" as="fetch" type="application/json">
+
+</head>
+
+<body>
+    <!-- Key Modal -->
+    <div class="modal" id="keyModal">
+        <div class="modal-content">
+            <h2 class="modal-title">Welcome to Xpenses</h2>
+            <form id="keyForm">
+                <div class="form-group">
+                    <label for="keyInput" class="form-label">Enter Access Key</label>
+                    <input type="password" class="form-input" id="keyInput" placeholder="Enter your access key"
+                        autocomplete="off">
+                </div>
+                <button type="button" class="btn" id="submitKey">Access Dashboard</button>
+            </form>
+        </div>
+    </div>
+
+    <!-- Main Application -->
+    <div id="mainContent" style="display: none;">
+        <!-- Header -->
+        <header class="header">
+            <div class="container">
+                <nav class="navbar">
+                    <a href="index.html" class="logo">Xpenses</a>
+                    <div class="nav-actions">
+                        <a href="allowance.html" class="nav-btn">
+                            <img src="icons/wallet.svg" alt="Wallet">
+                        </a>
+                        <a href="chart.html" class="nav-btn">
+                            <img src="icons/chart.svg" alt="Chart">
+                        </a>
+                    </div>
+                </nav>
+            </div>
+        </header>
+
+        <!-- Main Content -->
+        <main class="main-content">
+            <div class="container">
+                <h1 class="page-title">Financial Dashboard</h1>
+
+                <!-- Stats Cards -->
+                <div class="stats-grid">
+                    <div class="stat-card">
+                        <div class="stat-title">Daily Expenses</div>
+                        <div class="stat-value" id="daily">0</div>
+                        <div class="stat-currency">THB</div>
+                    </div>
+                    <div class="stat-card">
+                        <div class="stat-title">Monthly Expenses</div>
+                        <div class="stat-value" id="monthly">0</div>
+                        <div class="stat-currency">THB</div>
+                    </div>
+                    <div class="stat-card">
+                        <div class="stat-title">Total Expenses</div>
+                        <div class="stat-value" id="total_expenses">0</div>
+                        <div class="stat-currency">THB</div>
+                    </div>
+                    <div class="stat-card">
+                        <div class="stat-title">Daily Change</div>
+                        <div class="stat-value" id="daily_change">0</div>
+                        <div class="stat-currency" id="daily_change_indicator">THB</div>
+                    </div>
+                </div>
+
+                <!-- Content Layout -->
+                <div class="content-layout">
+                    <!-- Form Section -->
+                    <section class="form-section">
+                        <h2 class="section-title">Add New Expense</h2>
+                        <form id="expenseForm">
+                            <div class="form-group">
+                                <label for="expenseDate" class="form-label">Date</label>
+                                <input type="date" class="form-input" id="expenseDate">
+                            </div>
+                            <div class="form-group">
+                                <label for="category" class="form-label">Category</label>
+                                <select class="form-select" id="category">
+                                    <option value="" disabled selected>Select category</option>
+                                </select>
+                            </div>
+                            <div class="form-group">
+                                <label for="details" class="form-label">Description</label>
+                                <textarea class="form-input" id="details" rows="3"
+                                    placeholder="Enter expense description"></textarea>
+                            </div>
+                            <div class="form-group">
+                                <label for="expenseAmount" class="form-label">Amount</label>
+                                <input type="number" class="form-input" id="expenseAmount" placeholder="0" min="1"
+                                    step="1" step="0.01">
+                            </div>
+                            <button type="button" class="btn" id="addExpensesBtn">
+                                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                                    stroke-width="2">
+                                    <path d="M12 5v14M5 12h14" />
+                                </svg>
+                                Add Expense
+                            </button>
+                        </form>
+                    </section>
+
+                    <!-- Transactions Section -->
+                    <section class="transactions-section">
+                        <div class="transactions-header">
+                            <h2 class="transactions-title">Recent Transactions</h2>
+                            <button class="download-btn" id="download" title="Download CSV">
+                                <img src="icons/download.svg" alt="Download">
+                            </button>
+                        </div>
+                        <div id="groupedTransactions"></div>
+                    </section>
+                </div>
+
+                <!-- Older Transactions Section -->
+                <section class="older-transactions-section">
+                    <div class="transactions-header">
+                        <h2 class="transactions-title">Transaction History</h2>
+                        <div class="date-filter">
+                            <label for="historyDateRange" class="form-label">Show transactions from:</label>
+                            <select id="historyDateRange" class="form-select">
+                                <option value="week" selected>Last 7 days</option>
+                                <option value="month">Last 30 days</option>
+                                <option value="quarter">Last 90 days</option>
+                                <option value="all">All time</option>
+                            </select>
+                        </div>
+                    </div>
+                    <div id="olderTransactions"></div>
+                </section>
+            </div>
+        </main>
+    </div>
+
+
+
+    <!-- Scripts -->
+    <script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
+    <script src="js/modal-toast.js"></script>
+    <script src="js/key_check.js"></script>
+    <script src="js/app.js"></script>
+
+
+</body>
+
+</html>
